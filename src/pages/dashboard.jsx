@@ -121,7 +121,7 @@ const Dashboard = () => {
             type="text"
             name="searchbar"
             id="search"
-            placeholder="Search for all users"
+            placeholder="Search application"
           // onChange={inputHandler}
           />
         </InputGroupText>

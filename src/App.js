@@ -38,7 +38,7 @@ const App = () => {
       <Route
         {...rest}
         render={({ location }) =>
-          auth.isAuth ? children : <Redirect to={"/login"} />
+          auth.isAuth ? children : <Redirect to={"/auth/login"} />
         }
       />
     );
