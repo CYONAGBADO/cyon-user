@@ -11,107 +11,12 @@ import { getEntry } from "../services/dataGenerator";
 import { BiMenu } from "react-icons/bi";
 import { Form, Input, InputGroupText } from "reactstrap";
 import { Link } from "react-router-dom";
+import { decodeAccessToken } from "../services/userAccessControl";
 
 const moment = require("moment");
 
 const Dashboard = () => {
-  const [columns, setColumns] = useState([]);
-  const [userData, setUserData] = useState([]);
-  const [meta, setMeta] = useState({
-    limit: 10,
-    totalDocs: 3,
-    page: 1
-  });
-
-  useEffect(() => {
-    getEntry("users", (res, err) => {
-      if (!err) {
-        console.log(res.data);
-        setUserData(res.data.users);
-        setMeta(res.data);
-      } else {
-        console.log(err);
-      }
-    })
-    const cols = [
-      {
-        name: "Name",
-        selector: (row, index) => {
-          return row.name || row.username
-        },
-      },
-      {
-        name: "Phone no.",
-        selector: (row) => {
-          return row.phone;
-        },
-      },
-      {
-        name: "Occupation",
-        selector: (row, index) => {
-          return row.occupation || "----"
-        },
-      },
-      {
-        name: "Created At",
-        selector: (row, index) => {
-          return moment(row.createdAt).format("DD-MM-YYYY") || "----"
-        },
-      },
-    ]
-
-    setColumns(cols);
-  }, [])
-
-  const data = {
-    options: {
-      stroke: {
-        curve: "smooth",
-      },
-      dataLabels: {
-        enabled: false
-      },
-      fill: {
-        colors: ['#BDA95C']
-      },
-      line: {
-        colors: ['#BDA95C']
-      },
-      colors: ['#BDA95C'],
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-      }
-    },
-    series: [
-      {
-        name: "series-1",
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
-      }
-    ]
-  }
-
-  const piData = {
-    series: [60, 55],
-    options: {
-      chart: {
-        width: 380,
-        type: 'pie',
-      },
-      labels: ['Male', 'Female'],
-      colors: ['#9999EE', '#C59ADB'],
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
-    }
-  }
+  const name = decodeAccessToken()?.name || decodeAccessToken()?.username 
 
   return (
     <div className="container">
@@ -126,7 +31,7 @@ const Dashboard = () => {
           />
         </InputGroupText>
       </div>
-      <div className="hero-title pt-3">Welcome User</div>
+      <div className="hero-title pt-3" style={{textTransform: "capitalize"}}>Welcome {name}</div>
 
       <div className="container-fluid dash-layer">
         <div className="pl-2">

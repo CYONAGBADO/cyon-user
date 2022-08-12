@@ -1,8 +1,11 @@
 import Axios from "axios";
 import UserSession from "../constants/UserSession";
 
+const staging = "https://cyon-db-bkend.herokuapp.com";
+const production = "https://cyon-db-prod.herokuapp.com";
+const local = "http://localhost:5001";
 
-export const base_url =  "http://localhost:5001/api/v1";
+export const base_url = `${staging}/api/v1`;
 
 
 Axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
