@@ -12,6 +12,7 @@ import ModalForm from "./form";
 import { FaBell, FaCog, FaTimes } from "react-icons/fa";
 import { BiMenu, BiNotification } from "react-icons/bi"
 import SearchPlaceholder from "./fakeSearch";
+import { SideNav } from "./sidenav";
 
 const NavBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,11 +40,7 @@ const NavBar = (props) => {
       </div>
       {
         show && 
-        <div style={{ height: "100vh", width: 200, background: "#343434", position: "fixed", top: "0px" }}>
-          <div className="close" style={{ position: "fixed", color: "#343434", right: "40%" }}>
-            <FaTimes onClick={() => toggle(!show)} />
-          </div>
-        </div>
+        <SideNav toggle={toggle} show={show} />
       }
     </>
   );

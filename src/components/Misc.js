@@ -20,6 +20,9 @@ import { MdRefresh } from "react-icons/md";
 import { RiMenu4Line } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { IoIosArrowForward } from "react-icons/io";
+import { getEntry } from "../services/dataGenerator";
+import DataTable from "react-data-table-component";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const _ = require("lodash");
 
@@ -282,3 +285,106 @@ export const MenuTile = (props) => {
     </div>
   );
 }
+
+export const AttendanceController = (props) => {
+  const { data, allUserData } = props.attendanceData;
+  const [columns, setColumns] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+
+  const [meta, setMeta] = useState({
+    limit: 10,
+    totalDocs: 3,
+    page: 1,
+  });
+
+  const getAttendanceRecord = (callback = null) => {
+    getEntry(`attendance`, (res, err) => {
+      if (!err) {
+        console.log(res.data);
+        let attend = []
+        for (let i = 0; i < 12; i++) {
+          const similar = res.data.attendance.find((att) => moment().startOf("year").add(i, "months").format("MMM") === moment(att.date).format("MMM"));
+          if (similar) {
+            attend.push(similar);
+          } else {
+            attend.push({
+              date: moment().startOf("year").add(i, "months")
+            })
+          }
+        }
+        console.log(attend);
+        setAttendance(attend);
+        if (callback) callback(res.data.attendance);
+      } else {
+        console.log(err);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getAttendanceRecord();
+  }, [meta.limit, meta.page, props.reloader]);
+
+  useEffect(() => {
+    getAttendanceRecord((record) => {
+      let cols = [
+        {
+          name: "Month",
+          selector: (row, index) => {
+            return moment(row.date).format("MMM")
+          }
+        },
+        {
+          name: "Presence",
+          selector: (row, index) => {
+            return (
+              row.id
+            ) ? (
+              <FaCheck style={{ color: "green" }} />
+            ) : (
+              <FaTimes style={{ color: "red" }} />
+            )
+          }
+        }
+      ];
+
+      setColumns(cols);
+    });
+  }, []);
+
+  return (
+    <DataTable
+      noHeader={false}
+      title={"All Users"}
+      subHeader={true}
+      subHeaderComponent={
+        <DataTableHeader
+        // isLoading={isRefreshing}
+        // refresh={reset}
+        >
+        </DataTableHeader>
+      }
+      columns={columns}
+      data={attendance}
+      striped={true}
+      highlightOnHover={true}
+      responsive={true}
+      overflowY={true}
+      pagination={true}
+      defaultSortField={"Swipe Time"}
+      paginationPerPage={meta.limit}
+      theme={"solarized"}
+      paginationTotalRows={meta.totalDocs}
+      paginationServer={true}
+      noRowsPerPage={false}
+      // onRowClicked={(row) => {
+      //   // <userInfoModal />;
+      // }}
+      // progressPending={isFetching}
+      onChangeRowsPerPage={(rows) => setMeta({ ...meta, limit: rows })}
+      onChangePage={(page) => setMeta({ ...meta, page: page })}
+    // progressComponent={<Loading title="Gathering logs, Please wait..." />}
+    // noDataComponent={<EmptyResult text={"No logs found"} />}
+    />
+  );
+};

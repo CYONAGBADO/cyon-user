@@ -11,12 +11,12 @@ import { generateAccessToken } from '../services/userAccessControl';
 
 const LogIn = () => {
   const [show, toggle] = useState(false);
-  const [email, setEmail] = useState("");
+  const [Id, setId] = useState("");
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
   const validateForm = () => {
-    return (email.length > 0) && (password.length > 0);
+    return (Id.length > 0) && (password.length > 0);
   }
 
   const handleOnSubmit = (e) => {
@@ -25,13 +25,13 @@ const LogIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     let payload = {
-      email,
+      [Id.match(/^[\+]?[(]?[0-9]{9,13}[)]?$/) ? "phone" : "email"]: Id,
       password
     }
-    createEntry("auth/login-admin", payload, (res, err) => {
+    createEntry("auth/login", payload, (res, err) => {
       if (!err) {
-        console.log(res);
         generateAccessToken(res.data, (UAT) => {
           dispatch(loginAction(UAT));
         })
@@ -47,7 +47,7 @@ const LogIn = () => {
     <div className='login'>
       <div className='container-fluid'>
         <Row>
-          <div className="col-md-12 col-sm-6 p-3 mx-auto mt-5">
+          <div className="col-md-12 col-sm-6 p-3 mx-auto d-flex" style={{flexDirection: "column", justifyContent: "center", height: "100vh"}} >
             <div classname='t'>
               <h1> Log In</h1>
             </div>
@@ -59,9 +59,9 @@ const LogIn = () => {
                     <Input
                       autoFocus
                       type="text"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
+                      value={Id}
+                      onChange={(e) => setId(e.target.value)}
+                      placeholder="Enter your email or phone address"
                       required
                     />
                   </Col>
@@ -81,14 +81,16 @@ const LogIn = () => {
                   </Col>
                 </FormGroup>
 
-                <Button size="lg"
-                  type="submit"
-                  outline color='primary'
-                  disabled={!validateForm()}
-                  onClick={handleSubmit}
-                >
-                  Log in
-                </Button>
+                <FormGroup size="md" className='p-3' controlId="password">
+                  <Button size="lg"
+                    type="submit"
+                    outline color='primary'
+                    disabled={!validateForm()}
+                    onClick={handleSubmit}
+                  >
+                    Log in
+                  </Button>
+                </FormGroup>
               </Form>
             </Container>
           </div>
