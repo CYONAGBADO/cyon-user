@@ -185,7 +185,7 @@ li.clickable {
 .col-primary-bg {
   background-color: #2e444766;
   /* color: white; */
-  height: 33vh;
+  min-height: 33vh;
   /* border-bottom-left-radius: 250px; */
 }
 

@@ -13,6 +13,7 @@ const LogIn = () => {
   const [show, toggle] = useState(false);
   const [Id, setId] = useState("");
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
 
   const validateForm = () => {
@@ -36,7 +37,8 @@ const LogIn = () => {
           dispatch(loginAction(UAT));
         })
       } else {
-        console.log(err)
+        err && setError(err.message.includes("404") ? "This account does not exist" : err.message);
+        console.log(err.message)
       }
     })
 
@@ -47,11 +49,12 @@ const LogIn = () => {
     <div className='login'>
       <div className='container-fluid'>
         <Row>
-          <div className="col-md-12 col-sm-6 p-3 mx-auto d-flex" style={{flexDirection: "column", justifyContent: "center", height: "100vh"}} >
+        <div className="col-md-6 col-sm-6 p-3 mx-auto d-flex" style={{flexDirection: "column", justifyContent: "center", height: "100vh"}} >
             <div classname='t'>
               <h1> Log In</h1>
             </div>
             <Container className='shadow-lg col-primary-bg form-bg-content py-3'>
+              <p style={{color: "red"}}>{error}</p>
               <Form>
                 <FormGroup size="lg" className='p-3' controlId="user" row>
                   <Label>User</Label>
@@ -60,7 +63,10 @@ const LogIn = () => {
                       autoFocus
                       type="text"
                       value={Id}
-                      onChange={(e) => setId(e.target.value)}
+                      onChange={(e) => {
+                        setError("")
+                        setId(e.target.value)
+                      }}
                       placeholder="Enter your email or phone address"
                       required
                     />
@@ -74,7 +80,10 @@ const LogIn = () => {
                     <Input
                       type="password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        setError("");
+                        setPassword(e.target.value)
+                      }}
                       placeholder="Enter your password"
                       required
                     />

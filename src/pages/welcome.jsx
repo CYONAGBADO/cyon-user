@@ -1,14 +1,14 @@
 import React from "react";
-import Picture from "../imges/my_pics.jpg";
 import CYON from "../imges/CYON.png";
+import CYONBG from "../imges/CYONBG.png";
 import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
 const Welcome = (props) => {
     return (
-        <div className="container-fluid" style={{ background: `url(${Picture})` }}>
-            <div className="row" style={{ background: "#322c4cf0" }}>
-                <div className="col-md-6 hideInMobile">
+        <div className="container-fluid" style={{ background: `url(${CYONBG})`, backgroundSize: "cover" }}>
+            <div className="row" style={{ background: "#322c4cee" }}>
+                <div className="col-md-6">
                     <div style={{ background: `url(${CYON})`, backgroundSize: "cover", height: "100vh" }} />
                 </div>
                 <div className="col-md-5">

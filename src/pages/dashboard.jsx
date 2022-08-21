@@ -75,7 +75,9 @@ const Dashboard = () => {
 
   return (
     <div className="container">
-      <div className="mt-3">
+      <div className="row">
+        <div className="col-md-12">
+        <div className="mt-3">
         <InputGroupText>
           <Input
             type="text"
@@ -90,7 +92,7 @@ const Dashboard = () => {
       <div className="hero-title pt-3" style={{ textTransform: "capitalize" }}>Welcome {name}</div>
 
       <div className="scrollable">
-        <div className="container-fluid dash-layer">
+        <div className="container dash-layer">
           <div className="pl-2">
             Quick Actions
           </div>
@@ -178,6 +180,8 @@ const Dashboard = () => {
             />
             {/* </div> */}
           </div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
